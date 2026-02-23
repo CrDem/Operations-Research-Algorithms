@@ -30,7 +30,7 @@ static Matrix readCSV(const std::string& filepath) {
         if (!matrix.empty() && row.size() != matrix[0].size())
             throw std::runtime_error("Inconsistent row size in CSV");
 
-        matrix.push_back(row);
+        matrix.push_back(std::move(row));
     }
 
     if (matrix.empty())
