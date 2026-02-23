@@ -1,0 +1,8 @@
+/build/
+/build-*/
+dist/
+out/
+
+.vscode/
+
+/data/
