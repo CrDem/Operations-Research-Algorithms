@@ -9,12 +9,15 @@ std::string projectRoot = PROJECT_ROOT;
 using namespace std;
 int main() {
     
-    GameLP game = loadGameFromCSV(projectRoot + "/data/A_100.csv");
+    GameLP game = loadGameFromCSV(projectRoot + "/data/A_1mln_100.csv");
     HighsModel& model = game.model;
 
     // Create a Highs instance
     Highs highs;
     HighsStatus return_status;
+
+    highs.setOptionValue("solver", "ipm");
+    highs.setOptionValue("parallel", "on");
     
     // Pass the model to HiGHS
     return_status = highs.passModel(model);
@@ -44,7 +47,8 @@ int main() {
     cout << "First player strategy (p):\n";
     for (size_t i = 0; i < sol.col_value.size(); ++i) {
         double p = sol.col_value[i] / sum_x;
-        cout << "p[" << i << "] = " << p << "\n";
+        if (p > 0)
+            cout << "p[" << i << "] = " << p << "\n";
     }
 
     cout << "\nSecond player strategy (q):\n";
@@ -54,7 +58,8 @@ int main() {
 
     for (size_t j = 0; j < sol.row_dual.size(); ++j) {
         double q = sol.row_dual[j] / sum_y;
-        cout << "q[" << j << "] = " << q << "\n";
+        if (q > 0)
+            cout << "q[" << j << "] = " << q << "\n";
     }
 
     return 0;
